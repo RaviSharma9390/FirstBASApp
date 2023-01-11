@@ -13,6 +13,7 @@
 ### General project setup
 general:
   inferBuildTool: true
+  buildTool: "mta"
 
 ### Step-specific configuration
 steps:
@@ -22,10 +23,42 @@ steps:
   artifactPrepareVersion:
     versioningType: cloud_noTag
 
+  npmExecuteLint:
+    failOnError: true
+
+  CloudFoundaryDeploy:
+    mtaDeployParameters: "-f --version-rule All"
+
 ### Stage-specific configuration
 stages:
   'Confirm':
     manualConfirmation: false
+  Build:
+    mavenExecuteStaticChecks: false
+    npmExecuteLint: true
+
+  Additional Unit Tests:
+    npmExecuteScripts: false
+    karmaExecuteTests: false
+
+  Acceptance:
+    CloudFoundaryDeploy: false
+    cfApiEndpoint: "https://api.cf.us10-001.hana.ondemand.com"
+    cfOrg: "265c290ctrial"
+    cfSpace: "dev"
+    cfAppName: "FirstBASApp"
+    cfCredentialsId: "deploy-to-cf"
+    uiVeri5ExecuteTests: false
+
+
+  Release:
+    CloudFoundaryDeploy: true
+    cfApiEndpoint: "https://api.cf.us10-001.hana.ondemand.com"
+    cfOrg: "265c290ctrial"
+    cfSpace: "dev"
+    cfAppName: "FirstBASApp"
+    cfCredentialsId: "deploy-to-cf"
+    uiVeri5ExecuteTests: false
 
 #  Integration:
 #    credentials:
